@@ -274,4 +274,5 @@ def dar_formato_fecha(fecha_raw):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    #app.run(host="0.0.0.0")
+    app.run()
