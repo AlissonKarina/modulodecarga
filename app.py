@@ -31,7 +31,7 @@ msg_error_column = 'El formato del excel no contiene la columna'
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'Back de Módulo de carga, ready'
 
 
 @app.route('/upload', methods=['POST']) 
