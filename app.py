@@ -38,13 +38,15 @@ def hello_world():
 def upload():
     #TARGET = APP_ROOT + "static/"
     target = os.path.join(APP_ROOT, "static")
+    
+    return str(target)
 
     #CHEQUEA SI EL ARCHIVO ESTÁ PRESENTE O NO
     if 'file' in request.files:
-        return request.files['file'].filename
-        
+        return str(request.files['file'].filename)
+
     if 'file' not in request.files:
-        return "Not file found "
+        return "Not file found 123456"
     
 
     #EXISTE LA RUTA - TARGET ?
