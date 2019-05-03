@@ -193,16 +193,15 @@ def save_register(register, cur, duplicados,filename):
     if not existe(register, cur):
         print ("entra existe")
         #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
-        save_register_valid(register, cur)
-        """ return "Registrados en la BD" """
+        save_register_valid(register, cur) 
         #Obtiene el ultimo ID_RAW de la tabla RECUDACIONES_RAW
-        """ cur.execute("SELECT id_raw FROM recaudaciones_raw ORDER BY id_raw DESC limit 1")
+        cur.execute("SELECT id_raw FROM recaudaciones_raw ORDER BY id_raw DESC limit 1")
         id_rec = cur.fetchall()
-        fecha_raw = register[14] """
+        fecha_raw = register[14] 
         #DA FORMATO A LA FECHA
-        """ fecha = dar_formato_fecha(fecha_raw) """
+        fecha = dar_formato_fecha(fecha_raw) 
         #ACTUALIZA LA FECHA DE LA TABLA RECAUDACIONES SEGUN EL ID_REC
-        """ save_recaudaciones_normalizada(fecha, id_rec[0], cur) """
+        save_recaudaciones_normalizada(fecha, id_rec[0], cur)
         return 1
     else:
         #pasa a cadena el arrreglo REGISTER y lo agregar al arreglo bidimensional DUPLICADOS
@@ -215,14 +214,14 @@ def save_register_valid(register, cur):
     query = "INSERT INTO recaudaciones_raw(moneda, dependencia, concep, concep_a, concep_b, numero, codigo, nombre, importe, carnet, autoseguro, ave, devol_tran, observacion, fecha) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cur.execute(query, register)
 
-""" NO SE ENTIENDE """
+''' NO SE ENTIENDE
 #ENTENDIDO
 #GUARDA EL REGISTRO NORMALIZADO (FECHA) EN LA TABLA RECAUDACIONES
 def save_recaudaciones_normalizada(fecha, id_rec, cur):
     query = "UPDATE recaudaciones SET fecha=%s WHERE id_rec=%s"
     update = (fecha, id_rec)
     cur.execute(query, update)
-
+'''
 #
 #RUTA = FILENAME
 #NAME_OF_PC = 
@@ -237,13 +236,26 @@ def save_data_for_auditoria(filename, cur):
 
 def existe(register, cur):
     query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
-    data = (str(register[5]),)
+    data = (str(register[5]))
     cur.execute(query, data)
     flag = cur.fetchall()
     if int(flag[0][0]) == 0:
         return False
+    else:
+        query2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
+        data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
+        cur.execute(query2, data2)
+        flag2 = cur.fetchall()
+        if int(flag2[0][0])==0:
+            register[5] = addzero(register[5])
+            return False
+        else:
+            return True
     return True
 
+def addzero(numero):
+    print ("Numero cambiado")
+    return "0"+str(numero)
 
 def save_bad_files(self):
     return True
@@ -274,5 +286,5 @@ def dar_formato_fecha(fecha_raw):
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1")
+    #app.run(host="127.0.0.1")
     app.run()
