@@ -40,8 +40,12 @@ def upload():
     target = os.path.join(APP_ROOT, "static")
 
     #CHEQUEA SI EL ARCHIVO ESTÁ PRESENTE O NO
+    if 'file' in request.files:
+        return request.files['file'].filename
+        
     if 'file' not in request.files:
         return "Not file found "
+    
 
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
@@ -201,7 +205,7 @@ def save_register(register, cur, duplicados,filename):
         #DA FORMATO A LA FECHA
         fecha = dar_formato_fecha(fecha_raw) 
         #ACTUALIZA LA FECHA DE LA TABLA RECAUDACIONES SEGUN EL ID_REC
-        save_recaudaciones_normalizada(fecha, id_rec[0], cur)
+        #save_recaudaciones_normalizada(fecha, id_rec[0], cur)
         return 1
     else:
         #pasa a cadena el arrreglo REGISTER y lo agregar al arreglo bidimensional DUPLICADOS
