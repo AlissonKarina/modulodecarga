@@ -40,11 +40,12 @@ def upload():
     target = os.path.join(APP_ROOT, "static")
 
     #CHEQUEA SI EL ARCHIVO ESTÁ PRESENTE O NO
-    if 'file' in request.files:
-        return str(request.files['file'].filename)
+    """ if 'file_excel' in request.files: """
+    file = request.files['file']
+    return str(file.filename)
 
-    if 'file' not in request.files:
-        return "Not file found 123456"
+    """ if 'file_excel' not in request.files:
+        return "Not file found 123456" """
     
 
     #EXISTE LA RUTA - TARGET ?
