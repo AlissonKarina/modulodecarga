@@ -38,8 +38,6 @@ def hello_world():
 def upload():
     #TARGET = APP_ROOT + "static/"
     target = os.path.join(APP_ROOT, "static")
-    
-    return str(target)
 
     #CHEQUEA SI EL ARCHIVO ESTÁ PRESENTE O NO
     if 'file' in request.files:
