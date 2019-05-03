@@ -41,7 +41,7 @@ def upload():
 
     #CHEQUEA SI EL ARCHIVO ESTÁ PRESENTE O NO
     """ if 'file_excel' in request.files: """
-    file = request.files['file']
+    file = request.files['file_excel']
     return str(file.filename)
 
     """ if 'file_excel' not in request.files:
