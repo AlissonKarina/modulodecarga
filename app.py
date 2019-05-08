@@ -59,14 +59,14 @@ def upload():
     name_of_pc = request.form.get('name')
     ip = "200.48.225.130" #estatica
     formato = request.form.get('formato')
-    return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename
+    
     
     #CREA UN ARRAY respuesta
     respuesta = {}
 
     #GUARDA EL NOMBRE DEL ARCHIVO EN filename, viene de HTML
     filename = file.filename
-
+    return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename
     #destination = target + filename
     #SE GUARDA EL ARCHIVO EXCEL EN LA CARPETA CREADA DE DIRECCION target
     destination = "/".join([target, filename])
