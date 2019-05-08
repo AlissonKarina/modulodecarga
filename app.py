@@ -155,16 +155,14 @@ def process_excel_file(path_excel_file, filename, formato):
 
 
 def save_registers_in_database(df, filename, formato, duplicados):
-    reg_insertados = 10
-    reg_procesados = 20
-    reg_excluidos = 0
+    reg_insertados = 0
+    reg_procesados = 0
 
     conn = connect_database()
     cur = conn.cursor()
     save_data_for_auditoria(filename, cur)
-    return reg_procesados, reg_insertados, reg_excluidos
 
-    #reg_excluidos = 0
+    reg_excluidos = 0
     
     if formato == 1:
         for fila in df.itertuples():
@@ -194,6 +192,7 @@ def save_registers_in_database(df, filename, formato, duplicados):
 #ENTENDIDO
 def save_register(register, cur, duplicados,filename):
     print("existeeee" + str(existe(register, cur)))
+    return 0
     if not existe(register, cur):
         print ("entra existe")
         #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
