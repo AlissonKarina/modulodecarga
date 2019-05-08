@@ -158,15 +158,13 @@ def save_registers_in_database(df, filename, formato, duplicados):
     reg_insertados = 10
     reg_procesados = 20
     reg_excluidos = 0
-    
-    return reg_procesados, reg_insertados, reg_excluidos
-    
+
     conn = connect_database()
     cur = conn.cursor()
-   
     save_data_for_auditoria(filename, cur)
+    return reg_procesados, reg_insertados, reg_excluidos
 
-    reg_excluidos = 0
+    #reg_excluidos = 0
     
     if formato == 1:
         for fila in df.itertuples():
