@@ -191,23 +191,19 @@ def save_registers_in_database(df, filename, formato, duplicados):
 
 #ENTENDIDO
 def save_register(register, cur, duplicados,filename):
-    if not existe(register, cur):
-        #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
-        save_register_valid(register, cur) 
-        
-        #Obtiene el ultimo ID_RAW de la tabla RECUDACIONES_RAW
-        #cur.execute("SELECT id_raw FROM recaudaciones_raw ORDER BY id_raw DESC limit 1")
-        #id_rec = cur.fetchall()
-        #fecha_raw = register[14] 
-        #DA FORMATO A LA FECHA
-        #fecha = dar_formato_fecha(fecha_raw)  
-        #ACTUALIZA LA FECHA DE LA TABLA RECAUDACIONES SEGUN EL ID_REC
-        #save_recaudaciones_normalizada(fecha, id_rec[0], cur)
+    opcion = existe(register, cur)
+
+    if opcion == 0 :
+        save_register_valid(register, cur)
         return 1
-    else:
-        #pasa a cadena el arrreglo REGISTER y lo agregar al arreglo bidimensional DUPLICADOS
-        duplicados.append({'registro': str(register)})
-        return 0
+    else: 
+        if  opcion == 2:
+            register = addzero(register)           
+            save_register_valid(register, cur)
+            return 1
+        else:
+            duplicados.append({'registro': str(register)})
+            return 0
 
 #ENTENDIDO
 #GUARDA EL REGITRO QUE NO EXISTE EN LA TABLA RECAUDACIONES_REW , GUARDA LOS DATOS DEL EXCEL XD
@@ -244,20 +240,20 @@ def existe(register, cur):
     flag = cur.fetchall()
 
     if int(flag[0][0]) == 0:
-        return False
+        return 0
     else:
         query2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
         data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
         cur.execute(query2, data2)
         flag2 = cur.fetchall()
         if int(flag2[0][0])==0:
-            return True
+            return 2
         else:
-            return True
+            return 1
         
 
-def addzero(numero):
-    return "0"+str(numero)
+def addzero(register):
+    return (register[0], register[1], register[2], register[3], register[4],'0'+register[5] , register[6], register[7], str(register[8]),register[9] , register[10], register[11], register[12], register[13], str(register[14]))
 
 def save_bad_files(self):
     return True
