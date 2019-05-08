@@ -43,8 +43,6 @@ def upload():
     if 'file' not in request.files:
         return "Not file found"
 
-    return str(request.files['file'].filename)
-
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
         os.mkdir(target) #CREA LA CARPETA target COMO TAL
@@ -61,7 +59,7 @@ def upload():
     name_of_pc = request.form.get('name')
     ip = "200.48.225.130" #estatica
     formato = request.form.get('formato')
-    
+    return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename
     
     #CREA UN ARRAY respuesta
     respuesta = {}
