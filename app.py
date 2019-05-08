@@ -46,7 +46,7 @@ def upload():
     if 'file' in request.files:
         file = request.files['file']    
 
-    return str(file);
+    return str(file.filename)
 
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
