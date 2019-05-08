@@ -250,9 +250,8 @@ def existe(register, cur):
         data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
         cur.execute(query2, data2)
         flag2 = cur.fetchall()
-        return True
         if int(flag2[0][0])==0:
-            register[5] = addzero(register[5])
+            register[5] = str(addzero(register[5]))
             return False
         else:
             return True
