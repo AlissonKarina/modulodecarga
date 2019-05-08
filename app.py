@@ -192,7 +192,6 @@ def save_registers_in_database(df, filename, formato, duplicados):
 #ENTENDIDO
 def save_register(register, cur, duplicados,filename):
     if not existe(register, cur):
-        return 1
         #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
         #save_register_valid(register, cur) 
         
@@ -237,12 +236,13 @@ def save_data_for_auditoria(filename, cur):
 
 
 def existe(register, cur):
-    return False
-    """ query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
+    
+    query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
     data = (str(register[5]))
     cur.execute(query, data)
     flag = cur.fetchall()
-    if int(flag[0][0]) == 0:
+    return False
+    """ if int(flag[0][0]) == 0:
         return False
     else:
         return True """
