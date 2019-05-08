@@ -242,11 +242,11 @@ def existe(register, cur):
     
     cur.execute(query, data)
     return False;
-    flag = cur.fetchall()
+    """ flag = cur.fetchall()
     if int(flag[0][0]) == 0:
         return False
     else:
-        return True 
+        return True  """
 
 def addzero(numero):
     print ("Numero cambiado")
