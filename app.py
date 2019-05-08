@@ -193,7 +193,7 @@ def save_registers_in_database(df, filename, formato, duplicados):
 def save_register(register, cur, duplicados,filename):
     if not existe(register, cur):
         #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
-        #save_register_valid(register, cur) 
+        save_register_valid(register, cur) 
         
         #Obtiene el ultimo ID_RAW de la tabla RECUDACIONES_RAW
         #cur.execute("SELECT id_raw FROM recaudaciones_raw ORDER BY id_raw DESC limit 1")
@@ -240,13 +240,12 @@ def existe(register, cur):
     query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
     data = (str(register[5]))
     
-    """ cur.execute(query, data) """
-    return False;
-    """ flag = cur.fetchall()
+    cur.execute(query, data)
+    flag = cur.fetchall()
     if int(flag[0][0]) == 0:
         return False
     else:
-        return True  """
+        return True 
 
 def addzero(numero):
     print ("Numero cambiado")
