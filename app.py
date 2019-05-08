@@ -43,10 +43,7 @@ def upload():
     if 'file' not in request.files:
         return "Not file found"
 
-    if 'file' in request.files:
-        file = request.files['file']    
-
-    return str(file.filename)
+    return str(request.files['file'].filename)
 
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
