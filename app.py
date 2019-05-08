@@ -72,8 +72,6 @@ def upload():
     
     file.save(destination)
 
-    return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename + " destitaion: " + destination
-    
     """ if tipo_archivo == "zip":
         global total_registros_procesados, total_registros_insertados, total_registros_excluidos
         total_registros_procesados = 0
@@ -144,6 +142,7 @@ def process_excel_file(path_excel_file, filename, formato):
         df = pd.read_excel(path_excel_file, converters=formato_excel)   
         process_df = df[df.FECHA.notnull()]
         df_final = process_df.fillna(0)
+        return "Entraaaa , filename: ".str(filename)."formato: ".formato
         reg_procesados, reg_insertados, reg_excluidos = save_registers_in_database(df_final, filename, formato, duplicados)
         return reg_procesados, reg_insertados, reg_excluidos
     except AttributeError as e:
