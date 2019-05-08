@@ -251,7 +251,7 @@ def existe(register, cur):
         cur.execute(query2, data2)
         flag2 = cur.fetchall()
         if int(flag2[0][0])==0:
-            return False
+            return True
         else:
             return True
         
