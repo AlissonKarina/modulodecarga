@@ -239,9 +239,10 @@ def existe(register, cur):
     
     query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
     data = (str(register[5]))
+    return False
     cur.execute(query, data)
     flag = cur.fetchall()
-    return False
+    
     """ if int(flag[0][0]) == 0:
         return False
     else:
