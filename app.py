@@ -159,16 +159,16 @@ def process_excel_file(path_excel_file, filename, formato):
 
 
 def save_registers_in_database(df, filename, formato, duplicados):
-    reg_insertados = 0
-    reg_procesados = 0
-    reg_excluidos = 0
+    reg_insertados = 10
+    reg_procesados = 20
+    
     conn = connect_database()
     cur = conn.cursor()
-    return reg_procesados, reg_insertados, reg_excluidos
+   
     save_data_for_auditoria(filename, cur)
 
     reg_excluidos = 0
-    
+    return reg_procesados, reg_insertados, reg_excluidos
     if formato == 1:
         for fila in df.itertuples():
             register = (fila.MONEDA, fila.DEPENDENCIA, fila.CONCEP, fila.a, fila.b,
