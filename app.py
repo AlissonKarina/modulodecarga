@@ -240,7 +240,7 @@ def existe(register, cur):
     query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
     data = (str(register[5]))
     
-    cur.execute(query, data)
+    """ cur.execute(query, data) """
     return False;
     """ flag = cur.fetchall()
     if int(flag[0][0]) == 0:
