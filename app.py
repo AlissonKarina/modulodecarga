@@ -138,10 +138,6 @@ def process_excel_file(path_excel_file, filename, formato):
     duplicados = []
     formato_excel = set_formato_excel(formato)
 
-    reg_procesados = 10
-    reg_insertados = 20
-    reg_excluidos = 10
-
     try:
         app.logger.warning('destination: ' + path_excel_file )
         df = pd.read_excel(path_excel_file, converters=formato_excel)   
