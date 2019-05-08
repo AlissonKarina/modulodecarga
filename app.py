@@ -255,6 +255,7 @@ def existe(register, cur):
             return False
         else:
             return True
+        return True
 
 def addzero(numero):
     return "0"+str(numero)
