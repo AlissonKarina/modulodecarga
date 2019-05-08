@@ -191,6 +191,7 @@ def save_registers_in_database(df, filename, formato, duplicados):
 
 #ENTENDIDO
 def save_register(register, cur, duplicados,filename):
+    return 1;
     if not existe(register, cur):
         #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
         #save_register_valid(register, cur) 
