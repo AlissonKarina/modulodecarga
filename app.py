@@ -86,6 +86,7 @@ def upload():
         return jsonify(respuesta) """
     if tipo_archivo == "excel":
         #global duplicados
+        return "Entraaaa , filename: "+str(filename)+"formato: "+formato
         reg_procesados, reg_insertados, reg_excluidos = process_excel_file(destination, filename, int(formato))
         respuesta = {'filename': filename, 'status': status_indiv_file, 'registros_procesados': reg_procesados, 'registros_insertados': reg_insertados,
                      'registros_excluidos': reg_excluidos, 'registros_duplicados_detalle': duplicados}
@@ -138,8 +139,6 @@ def process_excel_file(path_excel_file, filename, formato):
     duplicados = []
     formato_excel = set_formato_excel(formato)
     try:
-        
-        return "Entraaaa , filename: "+str(filename)+"formato: "+formato
         app.logger.warning('destination: ' + path_excel_file )
         df = pd.read_excel(path_excel_file, converters=formato_excel)   
         process_df = df[df.FECHA.notnull()]
