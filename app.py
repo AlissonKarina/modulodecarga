@@ -60,19 +60,20 @@ def upload():
     ip = "200.48.225.130" #estatica
     formato = request.form.get('formato')
     
-    
     #CREA UN ARRAY respuesta
     respuesta = {}
 
     #GUARDA EL NOMBRE DEL ARCHIVO EN filename, viene de HTML
     filename = file.filename
-    return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename
+
     #destination = target + filename
     #SE GUARDA EL ARCHIVO EXCEL EN LA CARPETA CREADA DE DIRECCION target
     destination = "/".join([target, filename])
-
+    
     file.save(destination)
 
+    return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename + " destitaion: " + destination
+    
     """ if tipo_archivo == "zip":
         global total_registros_procesados, total_registros_insertados, total_registros_excluidos
         total_registros_procesados = 0
