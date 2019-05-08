@@ -192,16 +192,15 @@ def save_registers_in_database(df, filename, formato, duplicados):
 #ENTENDIDO
 def save_register(register, cur, duplicados,filename):
     if not existe(register, cur):
-        print ("entra existe")
         #GUARDA LOS DATOS DEL EXCEL EN LA TABLA RECAUDACIONES_RAW
         #save_register_valid(register, cur) 
-        """
+        
         #Obtiene el ultimo ID_RAW de la tabla RECUDACIONES_RAW
-        cur.execute("SELECT id_raw FROM recaudaciones_raw ORDER BY id_raw DESC limit 1")
-        id_rec = cur.fetchall()
-        fecha_raw = register[14] 
+        #cur.execute("SELECT id_raw FROM recaudaciones_raw ORDER BY id_raw DESC limit 1")
+        #id_rec = cur.fetchall()
+        #fecha_raw = register[14] 
         #DA FORMATO A LA FECHA
-        fecha = dar_formato_fecha(fecha_raw)  """
+        #fecha = dar_formato_fecha(fecha_raw)  
         #ACTUALIZA LA FECHA DE LA TABLA RECAUDACIONES SEGUN EL ID_REC
         #save_recaudaciones_normalizada(fecha, id_rec[0], cur)
         return 1
