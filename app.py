@@ -138,11 +138,12 @@ def process_excel_file(path_excel_file, filename, formato):
     duplicados = []
     formato_excel = set_formato_excel(formato)
     try:
+        
+        return "Entraaaa , filename: "+str(filename)+"formato: "+formato
         app.logger.warning('destination: ' + path_excel_file )
         df = pd.read_excel(path_excel_file, converters=formato_excel)   
         process_df = df[df.FECHA.notnull()]
         df_final = process_df.fillna(0)
-        return "Entraaaa , filename: "+str(filename)+"formato: "+formato
         reg_procesados, reg_insertados, reg_excluidos = save_registers_in_database(df_final, filename, formato, duplicados)
         return reg_procesados, reg_insertados, reg_excluidos
     except AttributeError as e:
