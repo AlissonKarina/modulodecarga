@@ -244,6 +244,8 @@ def existe(register, cur):
     flag = cur.fetchall()
 
     if int(flag[0][0]) == 0:
+        return False
+    else:
         query2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
         data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
         cur.execute(query2, data2)
@@ -253,8 +255,6 @@ def existe(register, cur):
             return False
         else:
             return True
-    else:
-        return True 
 
 def addzero(numero):
     return "0"+str(numero)
