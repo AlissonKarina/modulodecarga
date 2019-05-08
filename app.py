@@ -147,7 +147,7 @@ def process_excel_file(path_excel_file, filename, formato):
         df = pd.read_excel(path_excel_file, converters=formato_excel)   
         process_df = df[df.FECHA.notnull()]
         df_final = process_df.fillna(0)
-        return "reg_procesados: " + reg_procesados + "reg_insertados: " +reg_insertados+ "reg_excluidos: "+ reg_excluidos
+        return reg_procesados, reg_insertados, reg_excluidos
         reg_procesados, reg_insertados, reg_excluidos = save_registers_in_database(df_final, filename, formato, duplicados)
         return reg_procesados, reg_insertados, reg_excluidos
     except AttributeError as e:
