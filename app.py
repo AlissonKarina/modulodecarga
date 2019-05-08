@@ -169,6 +169,7 @@ def save_registers_in_database(df, filename, formato, duplicados):
             register = (fila.MONEDA, fila.DEPENDENCIA, fila.CONCEP, fila.a, fila.b,
                         fila.NUMERO, fila.CODIGO, fila.NOMBRE, fila.IMPORTE, fila.CARNET,
                         fila.AUTOSEGURO, fila.AVE, fila._13, fila.OBSERVACIONES, fila.FECHA)
+            return reg_procesados, reg_insertados, reg_excluidos
             flag = save_register(register, cur, duplicados, filename)
             reg_procesados += 1
             if flag == 1:
