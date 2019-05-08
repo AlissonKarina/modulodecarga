@@ -241,6 +241,7 @@ def existe(register, cur):
     data = (str(register[5]))
     
     cur.execute(query, data)
+    return False;
     flag = cur.fetchall()
     if int(flag[0][0]) == 0:
         return False
