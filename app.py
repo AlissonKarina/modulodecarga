@@ -161,6 +161,7 @@ def process_excel_file(path_excel_file, filename, formato):
 def save_registers_in_database(df, filename, formato, duplicados):
     reg_insertados = 0
     reg_procesados = 0
+    reg_excluidos = 0
     conn = connect_database()
     cur = conn.cursor()
     return reg_procesados, reg_insertados, reg_excluidos
