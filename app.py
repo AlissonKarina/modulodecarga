@@ -94,7 +94,7 @@ def upload():
 
 #CONEXION A LA BD
 def connect_database():
-    return ps.connect(host="67.205.143.180", port=5432, dbname="tcs2", user="modulo4", password="modulo4")
+    return ps.connect(host="172.16.64.133", port=5432, dbname="tcs2", user="modulo4", password="modulo4")
 
 #
 #path_zip_file = DESTINATION
@@ -191,19 +191,24 @@ def save_registers_in_database(df, filename, formato, duplicados):
 
 #ENTENDIDO
 def save_register(register, cur, duplicados,filename):
-    opcion = existe(register, cur)
+    flag = True
+    
+    while flag:
+        opcion = existe(register, cur)
 
-    if opcion == 0 :
-        save_register_valid(register, cur)
-        return 1
-    else: 
-        if  opcion == 2:
-            register = addzero(register)           
+        if opcion == 0 :
             save_register_valid(register, cur)
+            flag = False
             return 1
-        else:
-            duplicados.append({'registro': str(register)})
-            return 0
+        else: 
+            if  opcion == 2:
+                register = addzero(register)
+                flag = True
+                return 1
+            else:
+                duplicados.append({'registro': str(register)})
+                flag = False
+                return 0
 
 #ENTENDIDO
 #GUARDA EL REGITRO QUE NO EXISTE EN LA TABLA RECAUDACIONES_REW , GUARDA LOS DATOS DEL EXCEL XD
