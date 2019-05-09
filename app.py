@@ -204,7 +204,6 @@ def save_register(register, cur, duplicados,filename):
             if  opcion == 2:
                 register = addzero(register)
                 flag = True
-                return 0
             else:
                 duplicados.append({'registro': str(register)})
                 flag = False
