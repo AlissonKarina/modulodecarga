@@ -246,9 +246,8 @@ def existe(register, cur):
     if int(flag[0][0]) == 0:
         return 0
     else:
-        #    query = "INSERT INTO recaudaciones_raw(moneda, dependencia, concep, concep_a, concep_b, numero, codigo, nombre, importe, carnet, autoseguro, ave, devol_tran, observacion, fecha)
-        query2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND carnet=%s AND autoseguro=%s AND ave=%s AND devol_tran=%s AND observacion=%s AND fecha=%s;"
-        data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]),register[9], register[10], register[11], register[12], register[13], register[14])
+        query2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
+        data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
         cur.execute(query2, data2)
         flag2 = cur.fetchall()
         if int(flag2[0][0])==0:
