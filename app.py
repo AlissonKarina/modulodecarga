@@ -94,7 +94,7 @@ def upload():
 
 #CONEXION A LA BD
 def connect_database():
-    return ps.connect(host="67.205.143.180", port=5432, dbname="tcs2", user="modulo4", password="modulo4")
+    return ps.connect(host="172.16.64.133", port=5432, dbname="tcs2", user="modulo4", password="modulo4")
 
 #
 #path_zip_file = DESTINATION
@@ -237,23 +237,39 @@ def save_data_for_auditoria(filename, cur):
 
 def existe(register, cur):
     
-    query = "SELECT count(*) FROM recaudaciones_raw where numero=%s;"
-    data = (str(register[5]),)
-    
-    cur.execute(query, data)
-    flag = cur.fetchall()
+    #query_recraw = "SELECT count(*) FROM recaudaciones_raw where numero=%s"
+    #data_recraw = (str(register[5]),)
 
-    if int(flag[0][0]) == 0:
+    #cur.execute(query_recraw, data_recraw)
+    #flag_recraw = cur.fetchall()
+
+    query_rec = "SELECT count(*) FROM recaudaciones WHERE numero=%s"
+    data_rec = (str(register[5]),)
+
+    cur.execute(query_rec, data_rec)
+    flag_rec = cur.fetchall()
+
+    if int(flag_rec[0][0]) == 0:
         return 0
     else:
-        query2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
-        data2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
-        cur.execute(query2, data2)
-        flag2 = cur.fetchall()
-        if int(flag2[0][0])==0:
+        query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND f.nombre=%s  AND c.concepto=%s AND a.codigo=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
+
+        data_rec2 = (register[0], register[1], register[2], register[6],register[7], str(register[8]), register[14])
+        cur.execute(query_rec2, data_rec2)
+        flag_rec2 = cur.fetchall()
+
+        if int(flag_rec2[0][0])==0:
             return 2
         else:
             return 1
+        #query_recraw2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
+        #data_recraw2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
+        #cur.execute(query_recraw2, data_recraw2)
+        #flag_recraw2 = cur.fetchall()
+        #if int(flag_recraw2[0][0])==0:
+        #    return 2
+        #else:
+        #    return 1
         
 
 def addzero(register):
