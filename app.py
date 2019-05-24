@@ -43,8 +43,6 @@ def upload():
     if 'file' not in request.files:
         return "Not file found"
 
-    return "sì hay un file"
-
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
         os.mkdir(target) #CREA LA CARPETA target COMO TAL
@@ -87,6 +85,7 @@ def upload():
         os.remove(destination)
         return jsonify(respuesta) """
     if tipo_archivo == "excel":
+        return "sì hay un  y es un excel"
         #global duplicados
         reg_procesados, reg_insertados, reg_excluidos = process_excel_file(destination, filename, int(formato))
         respuesta = {'filename': filename, 'status': status_indiv_file, 'registros_procesados': reg_procesados, 'registros_insertados': reg_insertados,
