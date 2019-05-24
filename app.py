@@ -87,7 +87,6 @@ def upload():
     if tipo_archivo == "excel":
         #global duplicados
         reg_procesados, reg_insertados, reg_excluidos = process_excel_file(destination, filename, int(formato))
-        return "dklamsdklaskldjaskldjaklsdjk"
         respuesta = {'filename': filename, 'status': status_indiv_file, 'registros_procesados': reg_procesados, 'registros_insertados': reg_insertados,
                      'registros_excluidos': reg_excluidos, 'registros_duplicados_detalle': duplicados}
         os.remove(destination)
@@ -164,6 +163,8 @@ def save_registers_in_database(df, filename, formato, duplicados):
     save_data_for_auditoria(filename, cur)
 
     reg_excluidos = 0
+
+    return reg_procesados, reg_insertados, reg_excluidos
     
     if formato == 1:
         for fila in df.itertuples():
