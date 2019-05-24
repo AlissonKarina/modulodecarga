@@ -196,7 +196,7 @@ def save_register(register, cur, duplicados,filename):
     while flag:
         opcion = existe(register, cur)
 
-        if opcion == 0 :
+        if opcion == 0:
             save_register_valid(register, cur)
             flag = False
             return 1
