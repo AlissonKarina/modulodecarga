@@ -85,9 +85,9 @@ def upload():
         os.remove(destination)
         return jsonify(respuesta) """
     if tipo_archivo == "excel":
-        return "sì hay un  y es un excel"
         #global duplicados
         reg_procesados, reg_insertados, reg_excluidos = process_excel_file(destination, filename, int(formato))
+        return "dklamsdklaskldjaskldjaklsdjk"
         respuesta = {'filename': filename, 'status': status_indiv_file, 'registros_procesados': reg_procesados, 'registros_insertados': reg_insertados,
                      'registros_excluidos': reg_excluidos, 'registros_duplicados_detalle': duplicados}
         os.remove(destination)
@@ -255,7 +255,7 @@ def existe(register, cur):
     else:
         query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND f.nombre=%s  AND c.concepto=%s AND a.codigo=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
 
-        data_rec2 = (register[0], register[1], register[2], register[6],register[7], str(register[8]), register[14])
+        data_rec2 = (register[0], register[1], register[2], register[6], register[7], str(register[8]), register[14])
         cur.execute(query_rec2, data_rec2)
         flag_rec2 = cur.fetchall()
 
