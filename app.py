@@ -43,6 +43,8 @@ def upload():
     if 'file' not in request.files:
         return "Not file found"
 
+    return "sì hay un file"
+
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
         os.mkdir(target) #CREA LA CARPETA target COMO TAL
