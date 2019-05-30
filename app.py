@@ -236,7 +236,7 @@ def save_data_for_auditoria(filename, cur):
 
 
 def existe(register, cur):
-    
+    print("****************** EXISTE () !!! ******************")
     #query_recraw = "SELECT count(*) FROM recaudaciones_raw where numero=%s"
     #data_recraw = (str(register[5]),)
 
@@ -250,17 +250,26 @@ def existe(register, cur):
     flag_rec = cur.fetchall()
 
     if int(flag_rec[0][0]) == 0:
+        print("NUMERO DIFERENTE, RETURN 0")
+        print("facultad: " + str(register[1]))
+        print("numero: " + str(register[5]))
         return 0
     else:
-        query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND f.nombre=%s  AND c.concepto=%s AND a.codigo=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
+        query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND c.concepto=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
 
-        data_rec2 = (register[0], register[1], register[2], register[6], register[7], str(register[8]), register[14])
+        data_rec2 = (register[0], register[2],  register[7], str(register[8]), register[14])
         cur.execute(query_rec2, data_rec2)
         flag_rec2 = cur.fetchall()
 
         if int(flag_rec2[0][0])==0:
+            print("IGUAL NUMERO, PERO DIFERENTES CAMPOS, RETURN 2")
+            print("numero: " + str(register[5]))
+            print("facultad: " + str(register[1]))
             return 2
         else:
+            print("CAMPOS IGUALES, RETURN 1")
+            print("numero: " + str(register[5]))
+            print("facultad: " + str(register[1]))
             return 1
         #query_recraw2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
         #data_recraw2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
@@ -304,5 +313,5 @@ def dar_formato_fecha(fecha_raw):
 
 
 if __name__ == '__main__':
-    #app.run(host="127.0.0.1")
+#    app.run(host="127.0.0.1")
     app.run()
