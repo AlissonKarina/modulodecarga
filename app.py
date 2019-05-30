@@ -96,7 +96,7 @@ def upload():
 
 #CONEXION A LA BD
 def connect_database():
-    return ps.connect(host="67.205.143.180", port=5432, dbname="tcs2", user="modulo4", password="modulo4")
+    return ps.connect(host="172.16.64.133", port=5432, dbname="tcs2", user="modulo4", password="modulo4")
 
 #
 #path_zip_file = DESTINATION
