@@ -85,8 +85,10 @@ def upload():
         os.remove(destination)
         return jsonify(respuesta) """
     if tipo_archivo == "excel":
+        print("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         #global duplicados
         reg_procesados, reg_insertados, reg_excluidos = process_excel_file(destination, filename, int(formato))
+        print("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa despues")
         respuesta = {'filename': filename, 'status': status_indiv_file, 'registros_procesados': reg_procesados, 'registros_insertados': reg_insertados,
                      'registros_excluidos': reg_excluidos, 'registros_duplicados_detalle': duplicados}
         os.remove(destination)
@@ -134,6 +136,7 @@ def process_zip_file(path_zip_file, filename, formato):
 
 #return "tipo: "+tipo_archivo + " name_of_pc: " + name_of_pc + " formato: "+ formato + " filename: " + filename + " destitaion: " + destination
 def process_excel_file(path_excel_file, filename, formato):
+    print("process_excel_file HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
     global duplicados
     duplicados = []
     formato_excel = set_formato_excel(formato)
@@ -237,12 +240,28 @@ def save_data_for_auditoria(filename, cur):
 
 def existe(register, cur):
     print("****************** EXISTE () !!! ******************")
-    #query_recraw = "SELECT count(*) FROM recaudaciones_raw where numero=%s"
-    #data_recraw = (str(register[5]),)
+    query_recraw = "SELECT count(*) FROM recaudaciones_raw where numero=%s"
+    data_recraw = (str(register[5]),)
 
-    #cur.execute(query_recraw, data_recraw)
-    #flag_recraw = cur.fetchall()
+    cur.execute(query_recraw, data_recraw)
+    flag_recraw = cur.fetchall()
+    if int(flag_recraw[0][0]) == 0:
+        print("rec1-raw - no existe")
+        return ver_recaudaciones(register, cur)
+    else:
+        query = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND concep=%s AND nombre=%s AND importe=%s AND fecha=%s;"
+        data = (register[0], register[2],  register[7], str(register[8]), register[14])
+        cur.execute(query, data)
+        flag = cur.fetchall()
+        if int(flag[0][0]) == 0:
+            print("rec1-raw - mimo numero-campos-diferentes")
+            return ver_recaudaciones(register, cur)
+        else:
+            print("rec1-raw - duplicado")
+            return 1
 
+
+def ver_recaudaciones(register, cur):
     query_rec = "SELECT count(*) FROM recaudaciones WHERE numero=%s"
     data_rec = (str(register[5]),)
 
@@ -256,7 +275,6 @@ def existe(register, cur):
         return 0
     else:
         query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND c.concepto=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
-
         data_rec2 = (register[0], register[2],  register[7], str(register[8]), register[14])
         cur.execute(query_rec2, data_rec2)
         flag_rec2 = cur.fetchall()
