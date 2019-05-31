@@ -250,8 +250,8 @@ def existe(register, cur):
         print("rec1-raw - no existe")
         return ver_recaudaciones(register, cur)
     else:
-        query = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND concep=%s AND nombre=%s AND importe=%s AND fecha=%s;"
-        data = (register[0], register[2],  register[7], str(register[8]), register[14])
+        query = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND concep=%s AND numero=%s AND nombre=%s AND importe=%s AND fecha=%s;"
+        data = (register[0], register[2], str(register[5]),  register[7], str(register[8]), register[14])
         cur.execute(query, data)
         flag = cur.fetchall()
         if int(flag[0][0]) == 0:
@@ -275,8 +275,8 @@ def ver_recaudaciones(register, cur):
         print("numero: " + str(register[5]))
         return 0
     else:
-        query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND c.concepto=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
-        data_rec2 = (register[0], register[2],  register[7], str(register[8]), register[14])
+        query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND c.concepto=%s AND numero=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
+        data_rec2 = (register[0], register[2],  str(register[5]),   register[7], str(register[8]), register[14])
         cur.execute(query_rec2, data_rec2)
         flag_rec2 = cur.fetchall()
 
