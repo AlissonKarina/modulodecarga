@@ -144,7 +144,7 @@ def process_excel_file(path_excel_file, filename, formato):
     try:
         app.logger.warning('destination: ' + path_excel_file )
         df = pd.read_excel(path_excel_file, converters=formato_excel)
-
+           
         process_df = df[df.FECHA.notnull()]
         df_final = process_df.fillna(0)
         reg_procesados, reg_insertados, reg_excluidos = save_registers_in_database(df_final, filename, formato, duplicados)
@@ -153,8 +153,7 @@ def process_excel_file(path_excel_file, filename, formato):
         save_file_upload_error(filename, str(e))
         indice = str(e).find('attribute')
         global msg_error_column, status_indiv_file
-        error = msg_error_column + str(e)
-        #[indice + 9:]
+        error = msg_error_column + str(e)[indice + 9:] + " es el indice " + str(indice)
         status_indiv_file = "ERROR: " + error
         return 0
 
