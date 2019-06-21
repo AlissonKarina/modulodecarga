@@ -57,7 +57,7 @@ def upload():
     file = request.files['file']
     tipo_archivo = request.form.get('tipo')
     name_of_pc = request.form.get('name')
-    ip = "200.48.225.130" #estatica
+    ip = "172.16.64.133" #estatica
     formato = request.form.get('formato')
     
     #CREA UN ARRAY respuesta
@@ -96,7 +96,7 @@ def upload():
 
 #CONEXION A LA BD
 def connect_database():
-    return ps.connect(host="67.205.143.180", port=5432, dbname="testcarga01", user="modulo4", password="modulo4")
+    return ps.connect(host="172.16.64.133", port=5432, dbname="tcs", user="modulo4", password="modulo4")
 
 #
 #path_zip_file = DESTINATION
