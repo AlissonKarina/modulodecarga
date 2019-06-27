@@ -72,7 +72,7 @@ def upload():
     
     file.save(destination)
 
-    """ if tipo_archivo == "zip":
+    if tipo_archivo == "zip":
         global total_registros_procesados, total_registros_insertados, total_registros_excluidos
         total_registros_procesados = 0
         total_registros_insertados = 0
@@ -83,12 +83,10 @@ def upload():
         respuesta = {'file': filename, 'good_files': {'lista_detalle': good_files, 'total_registros_procesados': total_registros_procesados, 'total_registros_insertados': total_registros_insertados,
                      'total_registros_excluidos': total_registros_excluidos}, 'bad_files': bad_files}
         os.remove(destination)
-        return jsonify(respuesta) """
+        return jsonify(respuesta) 
     if tipo_archivo == "excel":
-        print("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         #global duplicados
         reg_procesados, reg_insertados, reg_excluidos = process_excel_file(destination, filename, int(formato))
-        print("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa despues")
         respuesta = {'filename': filename, 'status': status_indiv_file, 'registros_procesados': reg_procesados, 'registros_insertados': reg_insertados,
                      'registros_excluidos': reg_excluidos, 'registros_duplicados_detalle': duplicados}
         os.remove(destination)
