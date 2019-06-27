@@ -42,6 +42,8 @@ def upload():
     #CHEQUEA SI EL ARCHIVO ESTÁ PRESENTE O NO
     if 'file' not in request.files:
         return "Not file found"
+    
+    return "ingreso file"
 
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
