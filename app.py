@@ -43,7 +43,7 @@ def upload():
     if 'file' not in request.files:
         return "Not file found"
     
-    return "ingreso file"
+    print("ingreso file")
 
     #EXISTE LA RUTA - TARGET ?
     if not os.path.isdir(target):
@@ -62,7 +62,7 @@ def upload():
     ip = "172.16.64.133" #estatica
     formato = request.form.get('formato')
 
-    return "tipo_archivo:" + tipo_archivo + "| name_of_pc:"+name_of_pc
+    print("tipo_archivo:" + tipo_archivo + "| name_of_pc:"+name_of_pc)
     
     #CREA UN ARRAY respuesta
     respuesta = {}
@@ -77,7 +77,7 @@ def upload():
     file.save(destination)
 
     if tipo_archivo == "zip":
-        return "**************************** ARCHIVO ZIP **************************"
+        print("**************************** ARCHIVO ZIP **************************")
         global total_registros_procesados, total_registros_insertados, total_registros_excluidos
         total_registros_procesados = 0
         total_registros_insertados = 0
