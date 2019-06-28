@@ -78,7 +78,9 @@ def upload():
 
     if tipo_archivo == "zip":
         print("**************************** ARCHIVO ZIP **************************")
-        global total_registros_procesados, total_registros_insertados, total_registros_excluidos
+        print("**************************** ARCHIVO ZIP XDDD **************************")
+        #global total_registros_procesados, total_registros_insertados, total_registros_excluidos
+        print("**************************** ARCHIVO ZIP XDDD DESPUES **************************")
         total_registros_procesados = 0
         total_registros_insertados = 0
         total_registros_excluidos = 0
