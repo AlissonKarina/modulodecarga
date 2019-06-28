@@ -82,7 +82,8 @@ def upload():
         total_registros_procesados = 0
         total_registros_insertados = 0
         total_registros_excluidos = 0
-        #ver
+        print("total_registros_procesados:" + total_registros_procesados +"|total_registros_insertados:"+total_registros_insertados +"|total_registros_excluidos:"+total_registros_excluidos)
+        print("**************************** ANTES DEL PROCESS_ZIP_FILES **************************")
         process_zip_file(destination, filename, int(formato))
         global good_files, bad_files, duplicados
         respuesta = {'file': filename, 'good_files': {'lista_detalle': good_files, 'total_registros_procesados': total_registros_procesados, 'total_registros_insertados': total_registros_insertados,
