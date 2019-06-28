@@ -90,7 +90,7 @@ def upload():
         global good_files, bad_files, duplicados
         respuesta = {'file': filename, 'good_files': {'lista_detalle': good_files, 'total_registros_procesados': total_registros_procesados, 'total_registros_insertados': total_registros_insertados,
                      'total_registros_excluidos': total_registros_excluidos}, 'bad_files': bad_files}
-        os.remove(destination)
+        #os.remove(destination)
         return jsonify(respuesta) 
     if tipo_archivo == "excel":
         #global duplicados
@@ -114,7 +114,6 @@ def process_zip_file(path_zip_file, filename, formato):
     formato_excel = set_formato_excel(formato) #OBTIENE EL TIPO DE FORMATO
     print("formato_excel:" + str(formato_excel))
     archivo_zip = ZipFile(path_zip_file, 'r')
-    print("archivo_zip")
     content_of_zip = archivo_zip.infolist() #CONTENIDO DEL ZIP, ES DECIR UNA LISTA DE EXCEL
     good_files = []
     bad_files = []
