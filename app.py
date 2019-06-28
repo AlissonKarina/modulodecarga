@@ -109,10 +109,12 @@ def connect_database():
 #filename = NOMBRE DEL EXCEL
 #formato= TIPO DE FORMATO
 def process_zip_file(path_zip_file, filename, formato):
+    print("Entro al process_zip_file")
     global total_registros_procesados, total_registros_insertados, total_registros_excluidos, msg_error_column, good_files, bad_files, duplicados
     formato_excel = set_formato_excel(formato) #OBTIENE EL TIPO DE FORMATO
-
+    print("formato_excel:" + str(formato_excel))
     archivo_zip = ZipFile(path_zip_file, 'r')
+    print("archivo_zip")
     content_of_zip = archivo_zip.infolist() #CONTENIDO DEL ZIP, ES DECIR UNA LISTA DE EXCEL
     good_files = []
     bad_files = []
