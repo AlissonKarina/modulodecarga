@@ -114,7 +114,7 @@ def process_zip_file(path_zip_file, filename, formato):
     formato_excel = set_formato_excel(formato) #OBTIENE EL TIPO DE FORMATO
     print("formato_excel:" + str(formato_excel))
     archivo_zip = ZipFile(path_zip_file, 'r')
-    content_of_zip = archivo_zip.namelist() #CONTENIDO DEL ZIP, ES DECIR UNA LISTA DE EXCEL
+    content_of_zip = archivo_zip.infolist() #CONTENIDO DEL ZIP, ES DECIR UNA LISTA DE EXCEL
     print(content_of_zip)
     good_files = []
     bad_files = []
@@ -125,7 +125,6 @@ def process_zip_file(path_zip_file, filename, formato):
         if s.filename.endswith(extension): #VERIFICA QUE LA EXTENSION DEL ARCHIVO SEA .xls .xlsx
             print(s.filename)
             try:
-                path_zip_excel = "/".join([path_zip_file, s.filename])
                 df = pd.read_excel(archivo_zip.open(s.filename, 'r'), converters=formato_excel) #Obtiene primer excel
                 process_df = df[df.FECHA.notnull()]
                 df_final = process_df.fillna(0)
