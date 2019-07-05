@@ -126,7 +126,7 @@ def process_zip_file(path_zip_file, filename, formato):
             print(s.filename)
             try:
                 path_zip_excel = "/".join([path_zip_file, s.filename])
-                df = pd.read_excel(path_zip_excel, converters=formato_excel) #Obtiene primer excel
+                df = pd.read_excel(archivo_zip.open(s.filename, 'r'), converters=formato_excel) #Obtiene primer excel
                 process_df = df[df.FECHA.notnull()]
                 df_final = process_df.fillna(0)
                 reg_procesados, reg_insertados, reg_excluidos = save_registers_in_database(df_final, s.filename, formato, duplicados)
