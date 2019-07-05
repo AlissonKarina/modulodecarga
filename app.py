@@ -34,6 +34,7 @@ def hello_world():
     return 'Back de Módulo de carga, ready'
 
 
+
 @app.route('/upload', methods=['POST']) 
 def upload():
     #TARGET = APP_ROOT + "static/"
@@ -102,7 +103,7 @@ def upload():
 
 #CONEXION A LA BD
 def connect_database():
-    return ps.connect(host="67.205.143.180", port=5432, dbname="testcarga01", user="modulo4", password="modulo4")
+    return ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
 
 #
 #path_zip_file = DESTINATION
