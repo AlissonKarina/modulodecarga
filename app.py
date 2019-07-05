@@ -79,11 +79,11 @@ def upload():
     if tipo_archivo == "zip":
         print("**************************** ARCHIVO ZIP **************************")
         print("**************************** ARCHIVO ZIP XDDD **************************")
-        #global total_registros_procesados, total_registros_insertados, total_registros_excluidos
+        global total_registros_procesados, total_registros_insertados, total_registros_excluidos
         print("**************************** ARCHIVO ZIP XDDD DESPUES **************************")
-        # total_registros_procesados = 0
-        # total_registros_insertados = 0
-        # total_registros_excluidos = 0
+        total_registros_procesados = 0
+        total_registros_insertados = 0
+        total_registros_excluidos = 0
         print("total_registros_procesados:" + str(total_registros_procesados) +"|total_registros_insertados:"+ str(total_registros_insertados) +"|total_registros_excluidos:"+ str(total_registros_excluidos))
         print("**************************** ANTES DEL PROCESS_ZIP_FILES **************************")
         process_zip_file(destination, filename, int(formato))
@@ -110,9 +110,6 @@ def connect_database():
 #formato= TIPO DE FORMATO
 def process_zip_file(path_zip_file, filename, formato):
     print("Entro al process_zip_file")
-    total_registros_procesados = 0
-    total_registros_insertados = 0
-    total_registros_excluidos = 0
     global total_registros_procesados, total_registros_insertados, total_registros_excluidos, msg_error_column, good_files, bad_files, duplicados
     formato_excel = set_formato_excel(formato) #OBTIENE EL TIPO DE FORMATO
     print("formato_excel:" + str(formato_excel))
