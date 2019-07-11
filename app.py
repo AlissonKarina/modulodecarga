@@ -10,6 +10,7 @@ import os
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app.secret_key = os.urandom(24)
 
@@ -34,45 +35,37 @@ msg_error_column = 'El formato del excel no contiene la columna'
 # cursor = conexion.cursor()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         session.pop('user', None)
-        username = request.form['username']
-        password = request.form['password']
+        username = request.json.get['username']
+        password = request.json.get['password']
         print("LEE LOS VALORES")
-        cursor.execute("SELECT * FROM personas WHERE nro_tarjeta="+username)
+        cursor.execute("SELECT * FROM usuario WHERE user_name = " + username)
         validacion = cursor.fetchone() 
         conexion.commit()
         print("HACE LA VALIDACIÓN", validacion)
         if validacion != None:
             print("EXISTE EL REGISTRO",validacion)
             session['user'] = request.form['username']
-            cursor.execute("SELECT password FROM personas WHERE nro_tarjeta="+username)
+            cursor.execute("SELECT pass FROM usuario WHERE user_name = " + username)
             passcorrect = str(cursor.fetchone()[0])
             conexion.commit()
             print(passcorrect)
             print(password)
             if password == passcorrect:
                 print("VALIDA SESIÓN",passcorrect)
-                return redirect(url_for('consulta'))
+                return jsonify(result = True)
             else:
                 print("CONTRASEÑA INCORRECTA")
         else:    
-            print("NO EXISTE EL USUARIO",username)
-    return render_template('index.html')
-
-@app.before_request
-def before_request():
-    g.user = None
-    if 'user' in session:
-        g.user = session['user']
+            print("NO EXISTE EL USUARIO EN LA DB",username)
+    return 0
 
 @app.route('/')
 def hello_world():
     return 'Back de Módulo de carga, ready'
-
-
 
 @app.route('/upload', methods=['POST']) 
 def upload():
@@ -371,6 +364,13 @@ def set_formato_excel(formato):
 
 def dar_formato_fecha(fecha_raw):
     return fecha_raw[:4] + '-' + fecha_raw[4:6] + '-' + fecha_raw[6:]
+
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
 
 
 if __name__ == '__main__':
