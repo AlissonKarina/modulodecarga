@@ -48,7 +48,7 @@ def index():
         print("HACE LA VALIDACIÓN", validacion)
         if validacion != None:
             print("EXISTE EL REGISTRO",validacion)
-            session['user'] = request.form['username']
+            session['user'] = request.json.get['username']
             cursor.execute("SELECT pass FROM usuario WHERE user_name = " + username)
             passcorrect = str(cursor.fetchone()[0])
             conexion.commit()
