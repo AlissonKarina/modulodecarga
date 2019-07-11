@@ -56,7 +56,7 @@ def index():
             print(password)
             if password == passcorrect:
                 print("VALIDA SESIÓN",passcorrect)
-                return jsonify(result = True, )
+                return jsonify(result = True)
             else:
                 print("CONTRASEÑA INCORRECTA")
         else:    
