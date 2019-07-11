@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, jsonify, json
+from flask import Flask, request, jsonify, json, session, g
 from flask_cors import CORS
 from zipfile import ZipFile
 from helpers.campos_excel import formato_one, formato_two
@@ -11,6 +11,10 @@ import os
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+app.secret_key = os.urandom(24)
+
+conexion = ps.conexionect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
+cursor = conexion.cursor()
 
 name_of_pc = ""
 ip = ""
@@ -26,8 +30,43 @@ status_indiv_file = 'OK'
 msg_error_column = 'El formato del excel no contiene la columna'
 
 
-# conn = ps.connect(host="localhost", port=5432, dbname="tcs_prueba", user="postgres", password="1234")
-# cur = conn.cursor()
+# conexion = ps.conexionect(host="localhost", port=5432, dbname="tcs_prueba", user="postgres", password="1234")
+# cursor = conexion.cursor()
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        session.pop('user', None)
+        username = request.form['username']
+        password = request.form['password']
+        print("LEE LOS VALORES")
+        cursor.execute("SELECT * FROM personas WHERE nro_tarjeta="+username)
+        validacion = cursor.fetchone() 
+        conexion.commit()
+        print("HACE LA VALIDACIÓN", validacion)
+        if validacion != None:
+            print("EXISTE EL REGISTRO",validacion)
+            session['user'] = request.form['username']
+            cursor.execute("SELECT password FROM personas WHERE nro_tarjeta="+username)
+            passcorrect = str(cursor.fetchone()[0])
+            conexion.commit()
+            print(passcorrect)
+            print(password)
+            if password == passcorrect:
+                print("VALIDA SESIÓN",passcorrect)
+                return redirect(url_for('consulta'))
+            else:
+                print("CONTRASEÑA INCORRECTA")
+        else:    
+            print("NO EXISTE EL USUARIO",username)
+    return render_template('index.html')
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
 
 @app.route('/')
 def hello_world():
@@ -101,10 +140,6 @@ def upload():
         os.remove(destination)
         return jsonify(respuesta)
 
-#CONEXION A LA BD
-def connect_database():
-    return ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
-
 #
 #path_zip_file = DESTINATION
 #filename = NOMBRE DEL EXCEL
@@ -171,9 +206,7 @@ def save_registers_in_database(df, filename, formato, duplicados):
     reg_insertados = 0
     reg_procesados = 0
 
-    conn = connect_database()
-    cur = conn.cursor()
-    save_data_for_auditoria(filename, cur)
+    save_data_for_auditoria(filename, cursor)
 
     reg_excluidos = 0
     
@@ -182,35 +215,35 @@ def save_registers_in_database(df, filename, formato, duplicados):
             register = (fila.MONEDA, fila.DEPENDENCIA, fila.CONCEP, fila.a, fila.b,
                         fila.NUMERO, fila.CODIGO, fila.NOMBRE, fila.IMPORTE, fila.CARNET,
                         fila.AUTOSEGURO, fila.AVE, fila._13, fila.OBSERVACIONES, fila.FECHA)
-            flag = save_register(register, cur, duplicados, filename)
+            flag = save_register(register, cursor, duplicados, filename)
             reg_procesados += 1
             if flag == 1:
                 reg_insertados += 1
-        conn.commit()
-        conn.close()
+        conexion.commit()
+        conexion.close()
     elif formato == 2:
         for fila in df.itertuples():
             register = (fila._1, fila.DEPENDENCIA, fila.CONCEP, fila.a, fila.b,
                         fila.NUMERO, fila.CODIGO, fila.NOMBRE, fila.IMPORTE, fila.CARNET,
                         fila.AUTOSEGURO, fila.AVE, fila._13, fila.OBSERVACIONES, fila.FECHA)
-            flag = save_register(register, cur, duplicados, filename)
+            flag = save_register(register, cursor, duplicados, filename)
             reg_procesados += 1
             if flag == 1:
                 reg_insertados += 1
-        conn.commit()
-        conn.close()
+        conexion.commit()
+        conexion.close()
     reg_excluidos = reg_procesados - reg_insertados
     return reg_procesados, reg_insertados, reg_excluidos
 
 #ENTENDIDO
-def save_register(register, cur, duplicados,filename):
+def save_register(register, cursor, duplicados,filename):
     flag = True
     
     while flag:
-        opcion = existe(register, cur)
+        opcion = existe(register, cursor)
 
         if opcion == 0:
-            save_register_valid(register, cur)
+            save_register_valid(register, cursor)
             flag = False
             return 1
         else: 
@@ -224,59 +257,59 @@ def save_register(register, cur, duplicados,filename):
 
 #ENTENDIDO
 #GUARDA EL REGITRO QUE NO EXISTE EN LA TABLA RECAUDACIONES_REW , GUARDA LOS DATOS DEL EXCEL XD
-def save_register_valid(register, cur):
+def save_register_valid(register, cursor):
     query = "INSERT INTO recaudaciones_raw(moneda, dependencia, concep, concep_a, concep_b, numero, codigo, nombre, importe, carnet, autoseguro, ave, devol_tran, observacion, fecha) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    cur.execute(query, register)
+    cursor.execute(query, register)
 
 ''' NO SE ENTIENDE
 #ENTENDIDO
 #GUARDA EL REGISTRO NORMALIZADO (FECHA) EN LA TABLA RECAUDACIONES
-def save_recaudaciones_normalizada(fecha, id_rec, cur):
+def save_recaudaciones_normalizada(fecha, id_rec, cursor):
     query = "UPDATE recaudaciones SET fecha=%s WHERE id_rec=%s"
     update = (fecha, id_rec)
-    cur.execute(query, update)
+    cursor.execute(query, update)
 '''
 #
 #RUTA = FILENAME
 #NAME_OF_PC = 
 #IP =
 #REIGSTRA LOS DATOS DEL EXCEL EN LA TABLA REGISTRO_CARGA
-def save_data_for_auditoria(filename, cur):
+def save_data_for_auditoria(filename, cursor):
     global name_of_pc, ip
     query = "INSERT INTO registro_carga(nombre_equipo, ip, ruta) VALUES(%s, %s, %s)"
     update = (name_of_pc, ip, filename)
-    cur.execute(query, update)
+    cursor.execute(query, update)
 
 
-def existe(register, cur):
+def existe(register, cursor):
     print("****************** EXISTE () !!! ******************")
     query_recraw = "SELECT count(*) FROM recaudaciones_raw where numero=%s"
     data_recraw = (str(register[5]),)
 
-    cur.execute(query_recraw, data_recraw)
-    flag_recraw = cur.fetchall()
+    cursor.execute(query_recraw, data_recraw)
+    flag_recraw = cursor.fetchall()
     if int(flag_recraw[0][0]) == 0:
         print("rec1-raw - no existe")
-        return ver_recaudaciones(register, cur)
+        return ver_recaudaciones(register, cursor)
     else:
         query = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND concep=%s AND numero=%s AND nombre=%s AND importe=%s AND fecha=%s;"
         data = (register[0], register[2], str(register[5]),  register[7], str(register[8]), register[14])
-        cur.execute(query, data)
-        flag = cur.fetchall()
+        cursor.execute(query, data)
+        flag = cursor.fetchall()
         if int(flag[0][0]) == 0:
             print("rec1-raw - mimo numero-campos-diferentes")
-            return ver_recaudaciones(register, cur)
+            return ver_recaudaciones(register, cursor)
         else:
             print("rec1-raw - duplicado")
             return 1
 
 
-def ver_recaudaciones(register, cur):
+def ver_recaudaciones(register, cursor):
     query_rec = "SELECT count(*) FROM recaudaciones WHERE numero=%s"
     data_rec = (str(register[5]),)
 
-    cur.execute(query_rec, data_rec)
-    flag_rec = cur.fetchall()
+    cursor.execute(query_rec, data_rec)
+    flag_rec = cursor.fetchall()
 
     if int(flag_rec[0][0]) == 0:
         print("NUMERO DIFERENTE, RETURN 0")
@@ -286,8 +319,8 @@ def ver_recaudaciones(register, cur):
     else:
         query_rec2 = "select count(*) from recaudaciones r INNER JOIN concepto c on r.id_concepto = c.id_concepto INNER JOIN alumno a on a.id_alum = r.id_alum INNER JOIN facultad f on f.id_facultad = a.id_facultad WHERE  r.moneda=%s AND c.concepto=%s AND numero=%s AND a.ape_nom=%s AND r.importe=%s AND r.fecha=%s;"
         data_rec2 = (register[0], register[2],  str(register[5]),   register[7], str(register[8]), register[14])
-        cur.execute(query_rec2, data_rec2)
-        flag_rec2 = cur.fetchall()
+        cursor.execute(query_rec2, data_rec2)
+        flag_rec2 = cursor.fetchall()
 
         if int(flag_rec2[0][0])==0:
             print("IGUAL NUMERO, PERO DIFERENTES CAMPOS, RETURN 2")
@@ -301,8 +334,8 @@ def ver_recaudaciones(register, cur):
             return 1
         #query_recraw2 = "SELECT count(*) FROM recaudaciones_raw where moneda=%s AND dependencia=%s AND concep=%s AND concep_a=%s AND concep_b=%s AND codigo=%s AND nombre=%s AND importe=%s AND fecha=%s;"
         #data_recraw2 = (register[0], register[1], register[2], register[3], register[4], register[6], register[7], str(register[8]), register[14])
-        #cur.execute(query_recraw2, data_recraw2)
-        #flag_recraw2 = cur.fetchall()
+        #cursor.execute(query_recraw2, data_recraw2)
+        #flag_recraw2 = cursor.fetchall()
         #if int(flag_recraw2[0][0])==0:
         #    return 2
         #else:
@@ -318,15 +351,15 @@ def save_bad_files(self):
 
 def save_file_upload_error(filename, error):
     try:
-        conn = connect_database()
-        cur = conn.cursor()
+        conexion = conexionect_database()
+        cursor = conexion.cursorsor()
         query = "INSERT INTO recaudaciones_fallidas(nombre_archivo, descripcion_error) VALUES (%s, %s)"
         data = (filename, error)
-        cur.execute(query, data)
-        conn.commit()
-        conn.close()
+        cursor.execute(query, data)
+        conexion.commit()
+        conexion.close()
     except:
-        print("I am unable to connect to the database.")
+        print("I am unable to conexionect to the database.")
 
 
 def set_formato_excel(formato):
