@@ -14,7 +14,7 @@ app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app.secret_key = os.urandom(24)
 
-conexion = ps.conexionect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
+conexion = ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
 cursor = conexion.cursor()
 
 name_of_pc = ""
