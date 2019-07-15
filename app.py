@@ -37,6 +37,7 @@ msg_error_column = 'El formato del excel no contiene la columna'
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
+    result = False
     if request.method == 'POST':
         session.pop('user', None)
         username = request.json.get['username']
@@ -55,13 +56,14 @@ def index():
             print(passcorrect)
             print(password)
             if password == passcorrect:
+                result = True
                 print("VALIDA SESIÓN",passcorrect)
-                return jsonify(result = True)
+                return jsonify(result)
             else:
                 print("CONTRASEÑA INCORRECTA")
         else:    
             print("NO EXISTE EL USUARIO EN LA DB",username)
-    return 0
+    return jsonify(result)
 
 @app.route('/')
 def hello_world():
