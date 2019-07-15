@@ -36,42 +36,46 @@ conexion = ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", us
 cursor = conexion.cursor()
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        #session.pop('user', None)
-        query1 = "SELECT * FROM usuario"
-        print(cursor.execute(query1))
-        user_name = request.json['user_name']
-        password = request.json['password']
-        print("LEE LOS VALORES", user_name,password)
-        query = "SELECT COUNT(*) FROM usuario WHERE user_name = %s", (user_name,)
-        validacion = cursor.execute("SELECT COUNT(*) FROM usuario WHERE user_name = %s", (user_name,))
-        print (validacion)
-        conexion.commit()
-        #validacion = cursor.fetchone() 
-        print("HACE LA VALIDACIÓN", validacion)
-        if validacion != None:
-            print("EXISTE EL REGISTRO",validacion)
-            session['user'] = user_name
-            cursor.execute("SELECT pass FROM usuario WHERE user_name = %s", (user_name,))
-            passcorrect = str(cursor.fetchone()[0])
-            conexion.commit()
-            print(passcorrect)
-            print(password)
-            if password == passcorrect:
-                print("VALIDA SESIÓN",passcorrect)
-                return jsonify(result = True)
-            else:
-                print("CONTRASEÑA INCORRECTA")
-                return jsonify(result = False)
-        else:    
-            print("NO EXISTE EL USUARIO EN LA DB", user_name)
-    return jsonify(result=False)
-
 @app.route('/')
 def hello_world():
+    query = "SELECT * FROM usuario"
+    cursor.execute(query)
+    usuarios = cursor.fetchall()
+    for row in usuarios:
+        print("id", row[0],)
+    conexion.commit()
+    print(query)
     return 'Back de Módulo de carga, ready'
+
+@app.route('/login', methods=['GET', 'POST'])
+def index():
+    username = request.json['user_name']
+    password = request.json['password']
+    print("LEE LOS VALORES", username,password)
+    query = "SELECT * FROM usuario WHERE user_name = %s"
+    cursor.execute(query, ('username', ))
+    validacion = cursor.fetchone()
+    print (validacion)
+    #conexion.commit()
+    #validacion = cursor.fetchone() 
+    print("HACE LA VALIDACIÓN", validacion)
+    if validacion == True:
+        print("EXISTE EL REGISTRO",validacion)
+        session['user'] = username
+        cursor.execute("SELECT pass FROM usuario WHERE user_name = %s", (username,))
+        passcorrect = str(cursor.fetchone()[0])
+        print(passcorrect)
+        print(password)
+        if password == passcorrect:
+            print("VALIDA SESIÓN",passcorrect)
+            return jsonify(result = True)
+        else:
+            print("CONTRASEÑA INCORRECTA")
+            return jsonify(result = False)
+    else:    
+        print("NO EXISTE EL USUARIO EN LA DB", username)
+    return jsonify(result=False)
+
 
 @app.route('/upload', methods=['POST']) 
 def upload():
@@ -381,5 +385,5 @@ def before_request():
 
 if __name__ == '__main__':
 #    app.run(host="127.0.0.1")
-#    app.run(debug = True)
-    app.run()
+    app.run(debug = True)
+#    app.run()
