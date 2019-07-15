@@ -39,19 +39,22 @@ cursor = conexion.cursor()
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        session.pop('user', None)
-        data = request.get_json()
-        username = data['username']
-        password = data['password']
-        print("LEE LOS VALORES")
-        cursor.execute("SELECT * FROM usuario WHERE user_name = " + username)
-        validacion = cursor.fetchone() 
+        #session.pop('user', None)
+        query1 = "SELECT * FROM usuario"
+        print(cursor.execute(query1))
+        user_name = request.json['user_name']
+        password = request.json['password']
+        print("LEE LOS VALORES", user_name,password)
+        query = "SELECT COUNT(*) FROM usuario WHERE user_name = %s", (user_name,)
+        validacion = cursor.execute("SELECT COUNT(*) FROM usuario WHERE user_name = %s", (user_name,))
+        print (validacion)
         conexion.commit()
+        #validacion = cursor.fetchone() 
         print("HACE LA VALIDACIÓN", validacion)
         if validacion != None:
             print("EXISTE EL REGISTRO",validacion)
-            session['user'] = request.json.get['username']
-            cursor.execute("SELECT pass FROM usuario WHERE user_name = " + username)
+            session['user'] = user_name
+            cursor.execute("SELECT pass FROM usuario WHERE user_name = %s", (user_name,))
             passcorrect = str(cursor.fetchone()[0])
             conexion.commit()
             print(passcorrect)
@@ -63,7 +66,7 @@ def index():
                 print("CONTRASEÑA INCORRECTA")
                 return jsonify(result = False)
         else:    
-            print("NO EXISTE EL USUARIO EN LA DB",username)
+            print("NO EXISTE EL USUARIO EN LA DB", user_name)
     return jsonify(result=False)
 
 @app.route('/')
@@ -347,8 +350,8 @@ def save_bad_files(self):
 
 def save_file_upload_error(filename, error):
     try:
-        conexion = conexionect_database()
-        cursor = conexion.cursorsor()
+        #conexion = connect_database()
+        #cursor = conexion.cursorsor()
         query = "INSERT INTO recaudaciones_fallidas(nombre_archivo, descripcion_error) VALUES (%s, %s)"
         data = (filename, error)
         cursor.execute(query, data)
@@ -378,4 +381,5 @@ def before_request():
 
 if __name__ == '__main__':
 #    app.run(host="127.0.0.1")
+#    app.run(debug = True)
     app.run()
