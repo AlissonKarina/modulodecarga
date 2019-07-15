@@ -38,40 +38,45 @@ cursor = conexion.cursor()
 
 @app.route('/')
 def hello_world():
-    query = "SELECT * FROM usuario;"
-    cursor.execute(query)
-    usuarios = cursor.fetchall()
-    for row in usuarios:
-        print("id", row[0],row[1])
-    conexion.commit()
-    print(query)
+    # query = "SELECT * FROM usuario;"
+    # cursor.execute(query)
+    # usuarios = cursor.fetchall()
+    # for row in usuarios:
+    #     print("id", row[0],row[1])
+    # conexion.commit()
+    # print(query)
     return 'Back de Módulo de carga, ready'
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
-    data = request.get_json()  
-    print(data)
-    username = str(data['username']+' ')
-    password = data['password']
-    cursor.execute("SELECT * FROM usuario")
-    usuarios = cursor.fetchall()
-    for i in usuarios:
-        print(i[1])
+    result = False
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        #username = str(data['username']+' ')
+        username = str(data['username'])
+        password = data['password']
+        cursor.execute("SELECT * FROM usuario")
         print(username)
-        user = str(i[1])
-        if user == username:
-            passcorrect = str(i[2])
-            if passcorrect == password:
-                print("VALIDA SESIÓN", passcorrect)
-                return jsonify(result=True)
-            else:
-                print("CONTRASEÑA INCORRECTA")
-                return jsonify(result=3)
+        usuarios = cursor.fetchall()
+        for i in usuarios:
+            print(i[1])
+            user = str(i[1])
+            print(user)
+            if user == username:
+                print("Usuario encontrado")
+                passcorrect = str(i[2])
+                if passcorrect == password:
+                    print (user)
+                    print("VALIDA SESIÓN", passcorrect)
+                    result = True
+                else:
+                    print("CONTRASEÑA INCORRECTA")
+                    result = 3
         else:
-            return jsonify(result=2)
-    else:    
-        print("NO EXISTE EL USUARIO EN LA DB", username)
-    return jsonify(result=False)
+            print("NO EXISTE EL USUARIO EN LA DB", username)
+            result = 2
+    return jsonify(result)
 
 
 @app.route('/upload', methods=['POST']) 
