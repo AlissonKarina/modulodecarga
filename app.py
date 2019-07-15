@@ -9,13 +9,11 @@ import pandas as pd
 import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 #cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-#app.secret_key = os.urandom(24)
 
-conexion = ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
-cursor = conexion.cursor()
 
 name_of_pc = ""
 ip = ""
@@ -34,11 +32,14 @@ msg_error_column = 'El formato del excel no contiene la columna'
 # conexion = ps.conexionect(host="localhost", port=5432, dbname="tcs_prueba", user="postgres", password="1234")
 # cursor = conexion.cursor()
 
+conexion = ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
+cursor = conexion.cursor()
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        #session.pop('user', None)
+        session.pop('user', None)
         data = request.get_json()
         username = data['username']
         password = data['password']
@@ -368,11 +369,11 @@ def dar_formato_fecha(fecha_raw):
     return fecha_raw[:4] + '-' + fecha_raw[4:6] + '-' + fecha_raw[6:]
 
 
-#@app.before_request
-#def before_request():
-#    g.user = None
-#    if 'user' in session:
-#        g.user = session['user']
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
 
 
 if __name__ == '__main__':
