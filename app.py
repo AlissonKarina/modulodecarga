@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, jsonify, json, session, g
-from flask_cors import CORS
+#from flask_cors import CORS
 from zipfile import ZipFile
 from helpers.campos_excel import formato_one, formato_two
 import psycopg2 as ps
@@ -9,7 +9,7 @@ import pandas as pd
 import os
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+#cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app.secret_key = os.urandom(24)
@@ -37,9 +37,10 @@ msg_error_column = 'El formato del excel no contiene la columna'
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
+    print ("Entra a la funcion")
     result = False
     if request.method == 'POST':
-        session.pop('user', None)
+        #session.pop('user', None)
         username = request.json.get['username']
         password = request.json.get['password']
         print("LEE LOS VALORES")
