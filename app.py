@@ -57,12 +57,13 @@ def index():
             print(password)
             if password == passcorrect:
                 print("VALIDA SESIÓN",passcorrect)
-                return json.dumps(True)
+                return jsonify(result = True)
             else:
                 print("CONTRASEÑA INCORRECTA")
+                return jsonify(result = False)
         else:    
             print("NO EXISTE EL USUARIO EN LA DB",username)
-    return json.dumps(False)
+    return jsonify(result=False)
 
 @app.route('/')
 def hello_world():
