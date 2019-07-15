@@ -12,7 +12,6 @@ app = Flask(__name__)
 #cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-app.secret_key = os.urandom(24)
 
 conexion = ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
 cursor = conexion.cursor()
@@ -34,6 +33,9 @@ msg_error_column = 'El formato del excel no contiene la columna'
 # conexion = ps.conexionect(host="localhost", port=5432, dbname="tcs_prueba", user="postgres", password="1234")
 # cursor = conexion.cursor()
 
+@app.route('/')
+def hello_world():
+    return 'Back de Módulo de carga, ready'
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
@@ -41,8 +43,9 @@ def index():
     result = False
     if request.method == 'POST':
         #session.pop('user', None)
-        username = request.json.get['username']
-        password = request.json.get['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
         print("LEE LOS VALORES")
         cursor.execute("SELECT * FROM usuario WHERE user_name = " + username)
         validacion = cursor.fetchone() 
@@ -59,16 +62,12 @@ def index():
             if password == passcorrect:
                 result = True
                 print("VALIDA SESIÓN",passcorrect)
-                return jsonify(result)
+                return jsonify('username': username, 'password': password)
             else:
                 print("CONTRASEÑA INCORRECTA")
         else:    
             print("NO EXISTE EL USUARIO EN LA DB",username)
     return jsonify(result)
-
-@app.route('/')
-def hello_world():
-    return 'Back de Módulo de carga, ready'
 
 @app.route('/upload', methods=['POST']) 
 def upload():
