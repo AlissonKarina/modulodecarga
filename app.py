@@ -368,11 +368,11 @@ def dar_formato_fecha(fecha_raw):
     return fecha_raw[:4] + '-' + fecha_raw[4:6] + '-' + fecha_raw[6:]
 
 
-@app.before_request
-def before_request():
-    g.user = None
-    if 'user' in session:
-        g.user = session['user']
+#@app.before_request
+#def before_request():
+#    g.user = None
+#    if 'user' in session:
+#        g.user = session['user']
 
 
 if __name__ == '__main__':
