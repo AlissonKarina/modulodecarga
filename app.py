@@ -38,40 +38,37 @@ cursor = conexion.cursor()
 
 @app.route('/')
 def hello_world():
-    query = "SELECT * FROM usuario"
+    query = "SELECT * FROM usuario;"
     cursor.execute(query)
     usuarios = cursor.fetchall()
     for row in usuarios:
-        print("id", row[0],)
+        print("id", row[0],row[1])
     conexion.commit()
     print(query)
     return 'Back de Módulo de carga, ready'
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
-    username = request.json['user_name']
-    password = request.json['password']
-    print("LEE LOS VALORES", username,password)
-    query = "SELECT * FROM usuario WHERE user_name = %s"
-    cursor.execute(query, ('username', ))
-    validacion = cursor.fetchone()
-    print (validacion)
-    #conexion.commit()
-    #validacion = cursor.fetchone() 
-    print("HACE LA VALIDACIÓN", validacion)
-    if validacion == True:
-        print("EXISTE EL REGISTRO",validacion)
-        session['user'] = username
-        cursor.execute("SELECT pass FROM usuario WHERE user_name = %s", (username,))
-        passcorrect = str(cursor.fetchone()[0])
-        print(passcorrect)
-        print(password)
-        if password == passcorrect:
-            print("VALIDA SESIÓN",passcorrect)
-            return jsonify(result = True)
+    data = request.get_json()  
+    print(data)
+    username = str(data['username']+' ')
+    password = data['password']
+    cursor.execute("SELECT * FROM usuario")
+    usuarios = cursor.fetchall()
+    for i in usuarios:
+        print(i[1])
+        print(username)
+        user = str(i[1])
+        if user == username:
+            passcorrect = str(i[2])
+            if passcorrect == password:
+                print("VALIDA SESIÓN", passcorrect)
+                return jsonify(result=True)
+            else:
+                print("CONTRASEÑA INCORRECTA")
+                return jsonify(result=3)
         else:
-            print("CONTRASEÑA INCORRECTA")
-            return jsonify(result = False)
+            return jsonify(result=2)
     else:    
         print("NO EXISTE EL USUARIO EN LA DB", username)
     return jsonify(result=False)
@@ -362,7 +359,7 @@ def save_file_upload_error(filename, error):
         conexion.commit()
         conexion.close()
     except:
-        print("I am unable to conexionect to the database.")
+        print("I am unable to connect to the database.")
 
 
 def set_formato_excel(formato):
@@ -376,14 +373,13 @@ def dar_formato_fecha(fecha_raw):
     return fecha_raw[:4] + '-' + fecha_raw[4:6] + '-' + fecha_raw[6:]
 
 
-@app.before_request
-def before_request():
-    g.user = None
-    if 'user' in session:
-        g.user = session['user']
-
+# @app.before_request
+# def before_request():
+#     g.user = None
+#     if 'user' in session:
+#         g.user = session['user']
 
 if __name__ == '__main__':
 #    app.run(host="127.0.0.1")
-    app.run(debug = True)
-#    app.run()
+#    app.run(debug = True)
+    app.run()
