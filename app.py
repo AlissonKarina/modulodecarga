@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, jsonify, json, session, g
-from flask_cors import CORS
+#from flask_cors import CORS
 from zipfile import ZipFile
 from helpers.campos_excel import formato_one, formato_two
 import psycopg2 as ps
@@ -9,10 +9,10 @@ import pandas as pd
 import os
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+#cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-app.secret_key = os.urandom(24)
+#app.secret_key = os.urandom(24)
 
 conexion = ps.connect(host="67.205.143.180", port=5432, dbname="testcarga02", user="modulo4", password="modulo4")
 cursor = conexion.cursor()
