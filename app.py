@@ -217,7 +217,6 @@ def save_registers_in_database(df, filename, formato, duplicados):
             if flag == 1:
                 reg_insertados += 1
         conexion.commit()
-        conexion.close()
     elif formato == 2:
         for fila in df.itertuples():
             register = (fila._1, fila.DEPENDENCIA, fila.CONCEP, fila.a, fila.b,
@@ -228,7 +227,6 @@ def save_registers_in_database(df, filename, formato, duplicados):
             if flag == 1:
                 reg_insertados += 1
         conexion.commit()
-        conexion.close()
     reg_excluidos = reg_procesados - reg_insertados
     return reg_procesados, reg_insertados, reg_excluidos
 
@@ -378,5 +376,5 @@ def dar_formato_fecha(fecha_raw):
 
 if __name__ == '__main__':
 #    app.run(host="127.0.0.1")
-     app.run(debug = True)
+     app.run()
 #    app.run()
