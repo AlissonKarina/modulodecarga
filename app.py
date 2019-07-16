@@ -54,28 +54,20 @@ def index():
         data = request.get_json()
         print(data)
         #username = str(data['username']+' ')
-        username = str(data['username'])
+        username = data['username']
         password = data['password']
-        cursor.execute("SELECT * FROM usuario")
-        print(username)
-        usuarios = cursor.fetchall()
-        for i in usuarios:
-            print(i[1])
-            user = str(i[1])
-            print(user)
-            if user == username:
-                print("Usuario encontrado")
-                passcorrect = str(i[2])
-                if passcorrect == password:
-                    print (user)
-                    print("VALIDA SESIÓN", passcorrect)
-                    result = True
-                else:
-                    print("CONTRASEÑA INCORRECTA")
-                    result = 3
-        else:
-            print("NO EXISTE EL USUARIO EN LA DB", username)
+        cursor.execute("SELECT COUNT(*) FROM usuario where user_name = %s", (username,))
+        validate = cursor.fetchall()
+        print(validate)
+        if int(validate[0][0] == 0):
             result = 2
+        else:
+            cursor.execute("SELECT COUNT(*) FROM usuario where user_name=%s AND pass=%s", (username,password,))
+            val_pass = cursor.fetchall()
+            if int(val_pass[0][0]) != 0:
+                result = True
+            else:
+                result = 3
     return jsonify(result)
 
 
@@ -386,5 +378,5 @@ def dar_formato_fecha(fecha_raw):
 
 if __name__ == '__main__':
 #    app.run(host="127.0.0.1")
-#    app.run(debug = True)
-    app.run()
+     app.run(debug = True)
+#    app.run()
