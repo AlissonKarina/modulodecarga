@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, jsonify, json, session, g
-#from flask_cors import CORS
+from flask_cors import CORS
 from zipfile import ZipFile
 from helpers.campos_excel import formato_one, formato_two
 import psycopg2 as ps
@@ -10,7 +10,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-#cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -60,6 +60,7 @@ def index():
         validate = cursor.fetchall()
         print(validate)
         if int(validate[0][0] == 0):
+            # NO EXISTE EL USUARIO
             result = 2
         else:
             cursor.execute("SELECT COUNT(*) FROM usuario where user_name=%s AND pass=%s", (username,password,))
@@ -67,6 +68,7 @@ def index():
             if int(val_pass[0][0]) != 0:
                 result = True
             else:
+                # CONTRASE'A EQUIVOCADA
                 result = 3
     return jsonify(result)
 
